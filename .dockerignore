@@ -1,0 +1,9 @@
+db
+Dockerfile
+.dockerignore
+README.md
+.gitignore
+
+# This should contain all files created duriong the build
+node_modules
+build

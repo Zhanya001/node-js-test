@@ -1,0 +1,21 @@
+# Current Node LTS Version
+FROM node:18.17 as base
+
+RUN npm i -g pnpm
+
+FROM base as deeps
+
+WORKDIR /usr/src/app
+COPY package*.json  pnpm-lock.yaml .env  tsconfig.json ./
+
+# COPY
+RUN pnpm i 
+RUN npx prisma generate
+
+COPY . .
+RUN pnpm build
+
+RUN apt update && apt install -y make
+ENV port 4000
+EXPOSE 4000
+CMD sh -c "make migrate-inside-container && pnpm start:dev"

@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+    ports:
+      # My sql port local and docker from environment variable
+      - $MYSQL_LOCAL_PORT:$MYSQL_DOCKER_PORT
+    volumes:
+      - ./.db:/var/lib/mysql
+  test_node_api:
+    depends_on:
+      - mysql
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: test_node_api
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - 4000:4000
+    volumes:
+      # This is for development only and should be removed in production environment to avoid exposing the code
+      # This allow us to make changes to the code and see the changes without having to rebuild the image
+      - ./:/usr/src/app

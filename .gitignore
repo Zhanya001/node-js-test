@@ -1,0 +1,6 @@
+node_modules
+# Keep environment variables out of version control
+.env
+
+# Ignore log files and other temporary files created by the system or by users
+.db
